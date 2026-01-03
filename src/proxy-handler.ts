@@ -62,14 +62,16 @@ function isWebSocketUpgrade(response: Response): boolean {
 }
 
 function rewriteResponse(response: Response, proxyUrl: URL, targetUrl: URL): Response {
-  const headers = new Headers(response.headers);
-  const location = headers.get('location');
-  if (location) {
-    const rewritten = rewriteLocation(location, proxyUrl, targetUrl);
-    if (rewritten) {
-      headers.set('location', rewritten);
-    }
+  const location = response.headers.get('location');
+  if (!location) {
+    return response;
   }
+  const rewritten = rewriteLocation(location, proxyUrl, targetUrl);
+  if (!rewritten) {
+    return response;
+  }
+  const headers = new Headers(response.headers);
+  headers.set('location', rewritten);
   return new Response(response.body, {
     headers,
     status: response.status,
