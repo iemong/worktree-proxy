@@ -4,10 +4,15 @@
   "type": "module",
   "scripts": {
     "start": "bun run proxy.ts",
-    "dev": "bun run --watch proxy.ts"
+    "dev": "bun run --watch proxy.ts",
+    "lint": "biome lint .",
+    "format": "biome format .",
+    "check": "biome check ."
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@biomejs/biome": "2.3.10",
+    "@types/bun": "latest",
+    "ultracite": "7.0.5"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
