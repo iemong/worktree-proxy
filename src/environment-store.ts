@@ -66,7 +66,7 @@ export class EnvironmentStore {
   async setActiveEnvironmentById(id: string): Promise<EnvironmentRecord> {
     const environment = this.getEnvironment(id);
     if (!environment) {
-      throw new Error('指定されたエンバイロメントが存在しません');
+      throw new Error('The specified environment does not exist.');
     }
     this.data.activeEnvironmentId = id;
     this.data.activeEnvironmentUrl = environment.url;
@@ -97,7 +97,7 @@ export class EnvironmentStore {
   async updateEnvironment(id: string, update: { label: string; url: string }): Promise<EnvironmentRecord> {
     const environment = this.getEnvironment(id);
     if (!environment) {
-      throw new Error('指定されたエンバイロメントが存在しません');
+      throw new Error('The specified environment does not exist.');
     }
     environment.label = update.label;
     environment.url = update.url;
@@ -113,7 +113,7 @@ export class EnvironmentStore {
     const before = this.data.environments.length;
     this.data.environments = this.data.environments.filter((t) => t.id !== id);
     if (before === this.data.environments.length) {
-      throw new Error('指定されたエンバイロメントが存在しません');
+      throw new Error('The specified environment does not exist.');
     }
     if (this.data.activeEnvironmentId === id) {
       this.data.activeEnvironmentId = null;
@@ -141,7 +141,7 @@ export class EnvironmentStore {
         activeEnvironmentUrl: parsed?.activeEnvironmentUrl ?? parsed?.activeTargetUrl ?? null,
       };
     } catch (error) {
-      console.error('[EnvironmentStore] データ読み込みに失敗しました。空の状態で再初期化します', error);
+      console.error('[EnvironmentStore] Failed to load data. Reinitializing with empty state.', error);
       this.data = createEmptyData();
       await this.persist();
     }

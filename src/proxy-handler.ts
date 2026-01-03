@@ -5,7 +5,7 @@ import { buildHttpForwardHeaders, buildUpstreamHttpUrl, getActiveEnvironmentBase
 export async function proxyRequest(c: Context, store: EnvironmentStore): Promise<Response> {
   const environmentBase = getActiveEnvironmentBase(store);
   if (!environmentBase) {
-    return c.text('エンバイロメントが未設定です /__/ にアクセスして設定してください', 503);
+    return c.text('No environment selected. Visit /__/ to configure.', 503);
   }
 
   const incomingUrl = new URL(c.req.url);
@@ -32,7 +32,7 @@ export async function proxyRequest(c: Context, store: EnvironmentStore): Promise
     return rewriteResponse(upstreamResponse, incomingUrl, environmentBase);
   } catch (error) {
     console.error('[proxy] upstream fetch failed', error);
-    return c.text('アップストリームへの接続に失敗しました', 502);
+    return c.text('Failed to connect to upstream.', 502);
   }
 }
 

@@ -15,7 +15,7 @@ export function handleWebSocketProxy(
 ): Response | null {
   const environmentBase = getActiveEnvironmentBase(store);
   if (!environmentBase) {
-    return new Response('エンバイロメントが未設定です /__/ で設定してください', { status: 503 });
+    return new Response('No environment selected. Visit /__/ to configure.', { status: 503 });
   }
 
   const incomingUrl = new URL(req.url);
@@ -30,7 +30,7 @@ export function handleWebSocketProxy(
   });
 
   if (!upgraded) {
-    return new Response('WebSocket upgrade に失敗しました', { status: 500 });
+    return new Response('WebSocket upgrade failed.', { status: 500 });
   }
 
   return null;
