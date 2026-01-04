@@ -43,6 +43,30 @@ PROXY_DATA_DIR="$HOME/.kirikae" PROXY_PORT=3333 PROXY_ADMIN_PORT=3334 ./dist/kir
 - バイナリは **OS/CPUごとにビルドが必要** です（macOS Intel / Apple Silicon など）。
 - 書き込み先に権限が必要なので、`PROXY_DATA_DIR` の指定を推奨します。
 
+## 配布用バイナリセット（GitHub Releases向け）
+
+複数プラットフォーム向けのビルドとアーカイブ作成は以下を使います。
+
+```bash
+bun run build:release
+```
+
+生成物（`./release`）:
+- `kirikae-darwin-arm64.tar.gz`
+- `kirikae-darwin-x64.tar.gz`
+- `kirikae-linux-x64.tar.gz`
+- `kirikae-linux-arm64.tar.gz`
+- `kirikae-windows-x64.zip`
+- `SHA256SUMS`
+
+GitHub Releasesへアップロードする場合:
+
+```bash
+RELEASE_TAG=v1.0.0 bun run release:publish
+```
+
+※ `gh` (GitHub CLI) が必要です。
+
 ### 環境変数
 
 | 変数 | 既定値 | 説明 |
