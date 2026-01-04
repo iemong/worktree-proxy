@@ -1,9 +1,11 @@
 import { resolve, join } from 'node:path';
 import { existsSync } from 'node:fs';
+import { homedir } from 'node:os';
 
 const DEFAULT_PROXY_PORT = 3200;
 const DEFAULT_ADMIN_PORT = 4000;
 const DEFAULT_DATA_DIR = '.proxy-data';
+const DEFAULT_HOME_DATA_DIR = '.kirikae';
 const DATA_FILE_NAME = 'environments.json';
 const LEGACY_DATA_FILE_NAME = 'targets.json';
 export const ADMIN_BASE_PATH = '';
@@ -22,20 +24,40 @@ export function getAdminPort(): number {
   return Number.isFinite(parsed) ? parsed : DEFAULT_ADMIN_PORT;
 }
 
-export function getDataDir(): string {
+function getDataDirOverride(): string | null {
   const override = Bun.env.PROXY_DATA_DIR?.trim();
   if (override && override.length > 0) {
     return resolve(override);
   }
-  return resolve(DEFAULT_DATA_DIR);
+  return null;
+}
+
+export function getDataDir(): string {
+  const override = getDataDirOverride();
+  if (override) {
+    return override;
+  }
+  return resolve(homedir(), DEFAULT_HOME_DATA_DIR);
 }
 
 export function getDataFilePath(): string {
+  const override = getDataDirOverride();
   const dataDir = getDataDir();
   const primary = join(dataDir, DATA_FILE_NAME);
   const legacy = join(dataDir, LEGACY_DATA_FILE_NAME);
   if (existsSync(legacy) && !existsSync(primary)) {
     return legacy;
+  }
+  if (!override) {
+    const legacyDir = resolve(DEFAULT_DATA_DIR);
+    const legacyDefault = join(legacyDir, LEGACY_DATA_FILE_NAME);
+    const legacyDefaultPrimary = join(legacyDir, DATA_FILE_NAME);
+    if (existsSync(legacyDefault) && !existsSync(primary)) {
+      return legacyDefault;
+    }
+    if (existsSync(legacyDefaultPrimary) && !existsSync(primary)) {
+      return legacyDefaultPrimary;
+    }
   }
   return primary;
 }

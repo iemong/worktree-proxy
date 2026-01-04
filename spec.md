@@ -172,8 +172,9 @@ Body 例:
 - JSON ファイルに保存する
 - 保存場所（いずれか）:
   - `PROXY_DATA_DIR` がある場合: `{PROXY_DATA_DIR}/environments.json`
-  - ない場合: `./.proxy-data/environments.json`
+  - ない場合: `~/.kirikae/environments.json`
   - 互換: `targets.json` が存在し、`environments.json` がない場合は旧ファイルを優先
+  - 互換: 旧既定ディレクトリ `./.proxy-data` にデータがある場合はそちらを優先
 
 #### API
 

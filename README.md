@@ -49,7 +49,7 @@ PROXY_DATA_DIR="$HOME/.kirikae" PROXY_PORT=3333 PROXY_ADMIN_PORT=3334 ./dist/kir
 | --- | --- | --- |
 | `PROXY_PORT` | `3200` | プロキシが待ち受けるポート番号 |
 | `PROXY_ADMIN_PORT` | `4000` | 管理UI / 管理API が待ち受けるポート番号 |
-| `PROXY_DATA_DIR` | `./.proxy-data` | エンバイロメント一覧を保存するディレクトリ |
+| `PROXY_DATA_DIR` | `~/.kirikae` | エンバイロメント一覧を保存するディレクトリ |
 
 ## 主な機能
 
@@ -73,9 +73,10 @@ PROXY_DATA_DIR="$HOME/.kirikae" PROXY_PORT=3333 PROXY_ADMIN_PORT=3334 ./dist/kir
 
 ## データファイル
 
-- 既定: `./.proxy-data/environments.json`
+- 既定: `~/.kirikae/environments.json`
 - `PROXY_DATA_DIR` を指定すると `{PROXY_DATA_DIR}/environments.json`
 - 互換: 旧ファイル `targets.json` が存在し、`environments.json` がない場合は旧ファイルを優先
+- 互換: 旧既定ディレクトリ `./.proxy-data` にデータがある場合はそちらを優先
 
 ファイルは `.gitignore` 済みなので、各環境で独立して管理できます。
 
