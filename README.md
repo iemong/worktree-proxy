@@ -22,6 +22,27 @@ PROXY_PORT=3333 PROXY_ADMIN_PORT=3334 bun run proxy.ts
 - 管理画面: `http://localhost:{PROXY_ADMIN_PORT}/`
 - プロキシ経由でアプリ確認: `http://localhost:{PROXY_PORT}`
 
+## バイナリ化（実行ファイル）
+
+ローカル環境で単体バイナリにする場合は以下を使います。
+
+```bash
+bun run build:binary
+```
+
+生成物:
+- `./dist/kirikae`
+
+実行例:
+
+```bash
+PROXY_DATA_DIR="$HOME/.kirikae" PROXY_PORT=3333 PROXY_ADMIN_PORT=3334 ./dist/kirikae
+```
+
+注意点:
+- バイナリは **OS/CPUごとにビルドが必要** です（macOS Intel / Apple Silicon など）。
+- 書き込み先に権限が必要なので、`PROXY_DATA_DIR` の指定を推奨します。
+
 ### 環境変数
 
 | 変数 | 既定値 | 説明 |
