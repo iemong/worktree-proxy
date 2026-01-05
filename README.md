@@ -89,39 +89,40 @@ RELEASE_TAG=v1.0.0 bun run release:publish
 
 ## リリース管理
 
-### JSR への公開
+### 自動リリースフロー（推奨）
 
-1) バージョン更新
-```bash
-# jsr.json と package.json のバージョンを手動で更新
-```
-
-2) JSR に公開
-```bash
-bun run publish:jsr
-```
-
-### Changesets（バイナリリリース用）
-
-Changesets を導入しています。基本フローは以下です。
+Changesets と CI を使った自動リリースフローです。
 
 1) 変更内容を作成
 ```bash
 bun run changeset
 ```
 
-2) バージョン更新（`package.json` / `CHANGELOG.md` 生成）
+2) バージョン更新（`package.json` / `jsr.json` / `CHANGELOG.md` 自動更新）
 ```bash
 bun run changeset:version
 ```
 
-3) タグ作成＆push（例）
+3) タグ作成＆push
 ```bash
 git tag v1.0.0
 git push origin v1.0.0
 ```
 
-タグpushで CI が GitHub Release を作成します。
+CI が自動的に以下を実行します：
+- ✅ GitHub Release にバイナリを公開
+- ✅ JSR にパッケージを公開
+
+**必要な設定：**
+- GitHub リポジトリの Settings > Secrets and variables > Actions で `JSR_TOKEN` を設定
+- JSR トークンは https://jsr.io/account/tokens で作成
+
+### 手動公開（開発時）
+
+```bash
+# JSR に手動公開
+bun run publish:jsr
+```
 
 ### 環境変数
 

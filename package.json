@@ -21,9 +21,10 @@
     "build:release": "bash ./scripts/build-release.sh",
     "release:publish": "bash ./scripts/publish-release.sh",
     "changeset": "changeset",
-    "changeset:version": "changeset version",
+    "changeset:version": "changeset version && bun run sync-version",
     "changeset:publish": "changeset publish",
     "changeset:status": "changeset status",
+    "sync-version": "bun run scripts/sync-version.ts",
     "publish:jsr": "bunx jsr publish"
   },
   "devDependencies": {
