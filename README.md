@@ -4,8 +4,6 @@
 
 ## インストール
 
-### JSR から（推奨）
-
 ```bash
 # 直接実行（インストール不要）
 bunx jsr:@iemong/kirikae
@@ -15,114 +13,22 @@ bun add -g jsr:@iemong/kirikae
 kirikae
 ```
 
-### バイナリ版
-
-GitHub Releases から OS に応じたバイナリをダウンロードして実行できます。
-
 ### 開発版（ソースから）
-
-- Bun 1.1 以降
-
-依存関係は初回のみインストールしてください。
 
 ```bash
 bun install
+bun run proxy.ts
 ```
 
 ## 起動方法
 
 ```bash
-# JSR からインストールした場合
+# 環境変数でポートを指定
 PROXY_PORT=3333 PROXY_ADMIN_PORT=3334 kirikae
-
-# 開発版の場合
-PROXY_PORT=3333 PROXY_ADMIN_PORT=3334 bun run proxy.ts
 ```
 
 - 管理画面: `http://localhost:{PROXY_ADMIN_PORT}/`
 - プロキシ経由でアプリ確認: `http://localhost:{PROXY_PORT}`
-
-## バイナリ化（実行ファイル）
-
-ローカル環境で単体バイナリにする場合は以下を使います。
-
-```bash
-bun run build:binary
-```
-
-生成物:
-- `./dist/kirikae`
-
-実行例:
-
-```bash
-PROXY_DATA_DIR="$HOME/.kirikae" PROXY_PORT=3333 PROXY_ADMIN_PORT=3334 ./dist/kirikae
-```
-
-注意点:
-- バイナリは **OS/CPUごとにビルドが必要** です（macOS Intel / Apple Silicon など）。
-- 書き込み先に権限が必要なので、`PROXY_DATA_DIR` の指定を推奨します。
-
-## 配布用バイナリセット（GitHub Releases向け）
-
-複数プラットフォーム向けのビルドとアーカイブ作成は以下を使います。
-
-```bash
-bun run build:release
-```
-
-生成物（`./release`）:
-- `kirikae-darwin-arm64.tar.gz`
-- `kirikae-darwin-x64.tar.gz`
-- `kirikae-linux-x64.tar.gz`
-- `kirikae-linux-arm64.tar.gz`
-- `kirikae-windows-x64.zip`
-- `SHA256SUMS`
-
-GitHub Releasesへアップロードする場合:
-
-```bash
-RELEASE_TAG=v1.0.0 bun run release:publish
-```
-
-※ `gh` (GitHub CLI) が必要です。
-
-## リリース管理
-
-### 自動リリースフロー（推奨）
-
-Changesets と CI を使った自動リリースフローです。
-
-1) 変更内容を作成
-```bash
-bun run changeset
-```
-
-2) バージョン更新（`package.json` / `jsr.json` / `CHANGELOG.md` 自動更新）
-```bash
-bun run changeset:version
-```
-
-3) タグ作成＆push
-```bash
-git tag v1.0.0
-git push origin v1.0.0
-```
-
-CI が自動的に以下を実行します：
-- ✅ GitHub Release にバイナリを公開
-- ✅ JSR にパッケージを公開
-
-**必要な設定：**
-- GitHub リポジトリの Settings > Secrets and variables > Actions で `JSR_TOKEN` を設定
-- JSR トークンは https://jsr.io/account/tokens で作成
-
-### 手動公開（開発時）
-
-```bash
-# JSR に手動公開
-bun run publish:jsr
-```
 
 ### 環境変数
 
@@ -144,24 +50,29 @@ bun run publish:jsr
 | メソッド | パス | 説明 |
 | --- | --- | --- |
 | `GET` | `/status` | 現在アクティブな environment URL |
-| `POST` | `/switch` | `target` または `targetId` を指定して切り替え（パラメータ名は従来のまま） |
+| `POST` | `/switch` | `target` または `targetId` を指定して切り替え |
 | `GET` | `/targets` | 登録済みエンバイロメントの一覧 |
 | `POST` | `/targets` | エンバイロメントを追加（`label`, `url`） |
 | `PUT` | `/targets/:id` | 既存エンバイロメントを更新 |
 | `DELETE` | `/targets/:id` | エンバイロメントを削除 |
 
-`POST /switch` などは `application/json` / `application/x-www-form-urlencoded` の両方に対応しています。管理画面からは追加のヘルパーとして `POST /targets/:id/update` / `POST /targets/:id/delete` を使用しています。
+## リリース
+
+Changesets と CI を使った自動リリースです。
+
+```bash
+# 1. 変更内容を作成
+bun run changeset
+
+# 2. バージョン更新
+bun run changeset:version
+
+# 3. タグ作成＆push → CI が JSR に自動公開
+git tag v1.0.0
+git push origin v1.0.0
+```
 
 ## データファイル
 
 - 既定: `~/.kirikae/environments.json`
 - `PROXY_DATA_DIR` を指定すると `{PROXY_DATA_DIR}/environments.json`
-- 互換: 旧ファイル `targets.json` が存在し、`environments.json` がない場合は旧ファイルを優先
-- 互換: 旧既定ディレクトリ `./.proxy-data` にデータがある場合はそちらを優先
-
-ファイルは `.gitignore` 済みなので、各環境で独立して管理できます。
-
-## 開発メモ
-
-- プロキシはエンバイロメントの死活監視や自動検出を行いません。切り替え後に dev server 側でエラーになった場合は各自で対応してください。
-- WebSocket(HMR) は Upgrade リクエストをそのまま転送するだけのシンプルな構成です。
