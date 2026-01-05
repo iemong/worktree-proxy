@@ -48,15 +48,29 @@ function isWebSocketUpgrade(response: Response): boolean {
 
 function rewriteResponse(response: Response, proxyUrl: URL, environmentUrl: URL): Response {
   const location = response.headers.get('location');
-  if (!location) {
+  const contentEncoding = response.headers.get('content-encoding');
+
+  // Bun's fetch auto-decompresses but keeps Content-Encoding header
+  // We need to remove it to avoid browser decoding mismatch
+  const needsHeaderRewrite = location !== null || contentEncoding !== null;
+
+  if (!needsHeaderRewrite) {
     return response;
   }
-  const rewritten = rewriteLocation(location, proxyUrl, environmentUrl);
-  if (!rewritten) {
-    return response;
-  }
+
   const headers = new Headers(response.headers);
-  headers.set('location', rewritten);
+
+  // Remove Content-Encoding since Bun already decompressed the body
+  headers.delete('content-encoding');
+  headers.delete('content-length'); // Length changed after decompression
+
+  if (location) {
+    const rewritten = rewriteLocation(location, proxyUrl, environmentUrl);
+    if (rewritten) {
+      headers.set('location', rewritten);
+    }
+  }
+
   return new Response(response.body, {
     headers,
     status: response.status,
