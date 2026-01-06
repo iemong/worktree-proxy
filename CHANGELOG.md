@@ -1,5 +1,11 @@
 # worktree-proxy
 
+## 1.0.4
+
+### Patch Changes
+
+- Add explicit JSX import source for Deno runtime.
+
 ## 1.0.3
 
 ### Patch Changes
