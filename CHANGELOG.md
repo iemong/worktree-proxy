@@ -1,5 +1,11 @@
 # worktree-proxy
 
+## 1.0.3
+
+### Patch Changes
+
+- Simplify JSR publish workflow to OIDC only.
+
 ## 1.0.2
 
 ### Patch Changes

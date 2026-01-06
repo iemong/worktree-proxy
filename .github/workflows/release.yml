@@ -28,10 +28,4 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Publish to JSR (OIDC)
-        if: ${{ secrets.JSR_TOKEN == '' }}
-        run: bunx jsr publish --allow-dirty
-      - name: Publish to JSR (token)
-        if: ${{ secrets.JSR_TOKEN != '' }}
-        env:
-          JSR_TOKEN: ${{ secrets.JSR_TOKEN }}
         run: bunx jsr publish --allow-dirty
