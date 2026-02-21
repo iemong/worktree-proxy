@@ -1,5 +1,11 @@
 # worktree-proxy
 
+## 1.0.6
+
+### Patch Changes
+
+- Add favicon to admin UI and create kirikae CLI skill
+
 ## 1.0.5
 
 ### Patch Changes

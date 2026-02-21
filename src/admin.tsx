@@ -4,6 +4,7 @@ import type { Context } from 'hono';
 import type { EnvironmentRecord, EnvironmentStore } from './environment-store';
 import { ADMIN_STYLES } from './admin-styles';
 import { ADMIN_BASE_PATH } from './config';
+import { FAVICON_BASE64 } from './favicon';
 import { prefersHtml, readBody, redirectToAdmin, valueToString } from './utils';
 
 interface AdminOptions {
@@ -208,6 +209,7 @@ function AdminPage(state: PageState) {
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>KIRIKAE</title>
+        <link rel="icon" type="image/png" href={`data:image/png;base64,${FAVICON_BASE64}`} />
         <style>{ADMIN_STYLES}</style>
       </head>
       <body>

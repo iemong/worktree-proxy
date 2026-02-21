@@ -1,6 +1,6 @@
 {
   "name": "@iemong/kirikae",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "license": "MIT",
   "exports": {
     ".": "./proxy.ts"
@@ -14,7 +14,8 @@
       "node_modules",
       ".changesets",
       "*.test.ts",
-      "*.spec.ts"
+      "*.spec.ts",
+      "assets"
     ]
   }
 }
