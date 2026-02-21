@@ -1,5 +1,11 @@
 # worktree-proxy
 
+## 1.0.7
+
+### Patch Changes
+
+- Fix favicon: serve original PNG via route instead of base64
+
 ## 1.0.6
 
 ### Patch Changes

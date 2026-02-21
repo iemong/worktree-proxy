@@ -4,7 +4,7 @@ import type { Context } from 'hono';
 import type { EnvironmentRecord, EnvironmentStore } from './environment-store';
 import { ADMIN_STYLES } from './admin-styles';
 import { ADMIN_BASE_PATH } from './config';
-import { FAVICON_BASE64 } from './favicon';
+import { FAVICON_PNG } from './favicon';
 import { prefersHtml, readBody, redirectToAdmin, valueToString } from './utils';
 
 interface AdminOptions {
@@ -15,6 +15,12 @@ export function buildAdminRouter(store: EnvironmentStore, options: AdminOptions)
   const admin = new Hono();
 
   admin.get('/', createIndexHandler(store, options));
+
+  admin.get('/favicon.png', (c) => {
+    return new Response(FAVICON_PNG, {
+      headers: { 'Content-Type': 'image/png', 'Cache-Control': 'public, max-age=86400' },
+    });
+  });
 
   admin.get('/status', createStatusHandler(store));
 
@@ -209,7 +215,7 @@ function AdminPage(state: PageState) {
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>KIRIKAE</title>
-        <link rel="icon" type="image/png" href={`data:image/png;base64,${FAVICON_BASE64}`} />
+        <link rel="icon" type="image/png" href="/favicon.png" />
         <style>{ADMIN_STYLES}</style>
       </head>
       <body>
