@@ -1,5 +1,11 @@
 # worktree-proxy
 
+## 1.0.8
+
+### Patch Changes
+
+- Fix favicon to work on JSR: embed 16x16 PNG as base64 inline
+
 ## 1.0.7
 
 ### Patch Changes
